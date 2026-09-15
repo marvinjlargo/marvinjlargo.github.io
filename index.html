@@ -42,6 +42,10 @@
       color: inherit;
     }
 
+    section {
+      scroll-margin-top: 68px;
+    }
+
     ::selection {
       color: var(--paper);
       background: var(--accent);
@@ -65,6 +69,17 @@
       transform: translateY(0);
     }
 
+    .scroll-progress {
+      position: fixed;
+      inset: 0 0 auto;
+      z-index: 20;
+      height: 3px;
+      background: var(--accent);
+      transform: scaleX(0);
+      transform-origin: left center;
+      will-change: transform;
+    }
+
     .page {
       width: min(1180px, calc(100% - 40px));
       margin: 0 auto;
@@ -72,11 +87,15 @@
     }
 
     .topline {
+      position: sticky;
+      top: 0;
+      z-index: 9;
       display: grid;
       grid-template-columns: 1fr auto;
       align-items: center;
-      padding: 0 0 14px;
+      padding: 14px 0;
       border-bottom: 2px solid var(--line);
+      background: var(--paper);
       font-family: "IBM Plex Mono", monospace;
       font-size: 11px;
       line-height: 1.3;
@@ -86,6 +105,49 @@
 
     .topline .right {
       text-align: right;
+    }
+
+    .identity-link {
+      width: fit-content;
+      text-decoration: none;
+    }
+
+    .identity-link:hover,
+    .identity-link:focus-visible {
+      color: var(--accent);
+      outline: none;
+    }
+
+    .site-nav {
+      display: flex;
+      justify-content: flex-end;
+      gap: 18px;
+    }
+
+    .site-nav a {
+      position: relative;
+      color: var(--muted);
+      text-decoration: none;
+      transition: color .18s ease;
+    }
+
+    .site-nav a:hover,
+    .site-nav a:focus-visible,
+    .site-nav a[aria-current="location"] {
+      color: var(--ink);
+      outline: none;
+    }
+
+    .site-nav a[aria-current="location"]::before {
+      content: "";
+      position: absolute;
+      top: 50%;
+      left: -10px;
+      width: 5px;
+      height: 5px;
+      border-radius: 50%;
+      background: var(--accent);
+      transform: translateY(-50%);
     }
 
     .masthead {
@@ -374,6 +436,108 @@
       color: var(--muted);
     }
 
+    .case-study {
+      border-top: 1px solid var(--line);
+    }
+
+    .case-study summary {
+      display: grid;
+      grid-template-columns: 120px minmax(0, 1fr) auto;
+      gap: 20px;
+      align-items: center;
+      min-height: 84px;
+      padding: 18px 0;
+      cursor: pointer;
+      list-style: none;
+    }
+
+    .case-study summary::-webkit-details-marker {
+      display: none;
+    }
+
+    .case-study summary:focus-visible {
+      outline: 2px solid var(--accent);
+      outline-offset: 4px;
+    }
+
+    .case-prompt {
+      font-size: 18px;
+      font-weight: 500;
+      letter-spacing: -.02em;
+    }
+
+    .case-toggle {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-family: "IBM Plex Mono", monospace;
+      font-size: 10px;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+    }
+
+    .case-toggle .arrow {
+      transition: transform .2s ease, background .18s ease, color .18s ease;
+    }
+
+    .case-study summary:hover .arrow,
+    .case-study summary:focus-visible .arrow {
+      color: var(--ink);
+      border-color: var(--accent);
+      background: var(--accent);
+    }
+
+    .case-study[open] .case-toggle .arrow {
+      transform: rotate(45deg);
+    }
+
+    .case-grid {
+      display: grid;
+      grid-template-columns: 120px repeat(3, minmax(0, 1fr));
+      gap: 20px;
+      padding: 30px 0 38px;
+      border-top: 1px solid var(--line);
+    }
+
+    .case-intro {
+      color: var(--accent);
+      font-family: "IBM Plex Mono", monospace;
+      font-size: 11px;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+    }
+
+    .case-step {
+      padding-left: 18px;
+      border-left: 1px solid var(--line);
+    }
+
+    .case-step-label {
+      display: block;
+      margin-bottom: 11px;
+      color: var(--muted);
+      font-family: "IBM Plex Mono", monospace;
+      font-size: 10px;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+    }
+
+    .case-step-title {
+      display: block;
+      margin-bottom: 8px;
+      font-size: 22px;
+      font-weight: 500;
+      line-height: 1.15;
+      letter-spacing: -.03em;
+    }
+
+    .case-step-text {
+      margin: 0;
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.55;
+    }
+
     .arrow {
       display: inline-grid;
       place-items: center;
@@ -494,12 +658,25 @@
 
       .topline {
         grid-template-columns: 1fr;
-        gap: 4px;
+        gap: 9px;
       }
 
       .topline .right {
         color: var(--muted);
         text-align: left;
+      }
+
+      .site-nav {
+        justify-content: flex-start;
+        gap: 18px;
+        padding-left: 10px;
+        overflow-x: auto;
+        scrollbar-width: none;
+        white-space: nowrap;
+      }
+
+      .site-nav::-webkit-scrollbar {
+        display: none;
       }
 
       .masthead {
@@ -527,6 +704,33 @@
       .contact-row,
       .bottom {
         grid-template-columns: 72px minmax(0, 1fr);
+      }
+
+      .case-study summary {
+        grid-template-columns: 72px minmax(0, 1fr);
+        min-height: 104px;
+      }
+
+      .case-toggle {
+        grid-column: 2;
+        margin-top: -8px;
+      }
+
+      .case-grid {
+        grid-template-columns: 72px minmax(0, 1fr);
+        padding: 26px 0 34px;
+      }
+
+      .case-step {
+        grid-column: 2;
+        padding: 18px 0 0;
+        border-top: 1px solid var(--line);
+        border-left: 0;
+      }
+
+      .case-step:first-of-type {
+        padding-top: 0;
+        border-top: 0;
       }
 
       .profile-statement,
@@ -597,6 +801,15 @@
     }
 
     @media (max-width: 420px) {
+      .site-nav {
+        gap: 14px;
+        padding-left: 0;
+      }
+
+      .site-nav a[href="#profile"] {
+        display: none;
+      }
+
       .meta {
         grid-template-columns: 1fr;
       }
@@ -609,6 +822,10 @@
       .work-title,
       .contact-name {
         font-size: 34px;
+      }
+
+      .case-prompt {
+        font-size: 16px;
       }
     }
 
@@ -624,6 +841,8 @@
       .contact-row,
       .work-description,
       .row-meta,
+      .site-nav a,
+      .case-toggle .arrow,
       .arrow {
         transition: none;
       }
@@ -632,12 +851,19 @@
 </head>
 
 <body>
+  <div class="scroll-progress" aria-hidden="true"></div>
   <a class="skip-link" href="#main">Skip to content</a>
 
   <main class="page" id="main">
     <div class="topline">
-      <div>Marvin J. Largo</div>
-      <div class="right">Hamilton / Toronto, Canada — Civil Engineering / Construction</div>
+      <a class="identity-link" href="#main">Marvin J. Largo</a>
+      <nav class="site-nav right" aria-label="Page index">
+        <a href="#profile" aria-current="location">Profile</a>
+        <a href="#work">Work</a>
+        <a href="#practice">Practice</a>
+        <a href="#capabilities">Capability</a>
+        <a href="#contact">Contact</a>
+      </nav>
     </div>
 
     <header class="masthead">
@@ -665,7 +891,7 @@
       </aside>
     </header>
 
-    <section aria-labelledby="profile-title">
+    <section id="profile" data-section="profile" aria-labelledby="profile-title">
       <div class="section-head">
         <span class="section-index">01 / Profile</span>
         <h2 class="section-title" id="profile-title">Construction knowledge, translated into practical systems.</h2>
@@ -682,9 +908,68 @@
       </div>
     </section>
 
-    <section aria-labelledby="practice-title">
+    <section id="work" data-section="work" aria-labelledby="work-title">
       <div class="section-head">
-        <span class="section-index">02 / Practice</span>
+        <span class="section-index">02 / Work</span>
+        <h2 class="section-title" id="work-title">Selected construction and software work.</h2>
+      </div>
+
+      <div class="work-list">
+        <a class="work-row" href="https://github.com/marvinjlargo/wallstakeofftool/" target="_blank" rel="noopener noreferrer" aria-label="View the Wall Takeoff Tool project on GitHub">
+          <span class="row-index">P / 01</span>
+          <span class="work-main">
+            <span class="work-title">Wall Takeoff Tool</span>
+            <span class="work-description">A terminal-based tool that turns plan inputs into standardized shaft-wall elevation drawings and repeatable DXF / PDF packages.</span>
+          </span>
+          <span class="row-action row-action-stack">
+            <span class="row-meta">Python / DXF / PDF<br />SQLite / Automation</span>
+            <span>View GitHub <span class="arrow" aria-hidden="true">↗</span></span>
+          </span>
+        </a>
+
+        <details class="case-study">
+          <summary>
+            <span class="row-index">P / 01.A</span>
+            <span class="case-prompt">See the workflow behind the output.</span>
+            <span class="case-toggle">Project Logic <span class="arrow" aria-hidden="true">+</span></span>
+          </summary>
+          <div class="case-grid">
+            <span class="case-intro">Input → Output</span>
+            <div class="case-step">
+              <span class="case-step-label">01 / Input</span>
+              <span class="case-step-title">Plan inputs</span>
+              <p class="case-step-text">Project geometry and setup data provide the source for each drawing run.</p>
+            </div>
+            <div class="case-step">
+              <span class="case-step-label">02 / Rules</span>
+              <span class="case-step-title">Python + persisted data</span>
+              <p class="case-step-text">Standardized grids, levels, and dimensions are paired with reusable SQLite project data.</p>
+            </div>
+            <div class="case-step">
+              <span class="case-step-label">03 / Output</span>
+              <span class="case-step-title">DXF / PDF packages</span>
+              <p class="case-step-text">Shaft-wall elevation drawings can be generated consistently and run again when inputs change.</p>
+            </div>
+          </div>
+        </details>
+
+        <div class="work-row work-row-static" role="group" aria-label="Estimating Workflow Automation project">
+          <span class="row-index">P / 02</span>
+          <span class="work-main">
+            <span class="work-title">Estimating Workflow Automation</span>
+            <span class="work-description">Excel, VBA, and Bluebeam workflows focused on reducing repetitive takeoff steps and improving consistency across bids.</span>
+          </span>
+          <span class="row-action row-action-stack">
+            <span class="row-meta">Excel / VBA<br />Bluebeam</span>
+            <span>Applied Practice</span>
+          </span>
+        </div>
+      </div>
+    </section>
+
+    <section id="practice" data-section="practice" aria-labelledby="practice-title">
+      <div class="section-head">
+        <span class="section-index">03 / Practice</span>
         <h2 class="section-title" id="practice-title">Professional experience and current direction.</h2>
       </div>
 
@@ -709,40 +994,7 @@
       </div>
     </section>
 
-    <section aria-labelledby="work-title">
-      <div class="section-head">
-        <span class="section-index">03 / Work</span>
-        <h2 class="section-title" id="work-title">Selected construction and software work.</h2>
-      </div>
-
-      <div class="work-list">
-        <a class="work-row" href="https://github.com/marvinjlargo/wallstakeofftool/" target="_blank" rel="noopener noreferrer" aria-label="View the Wall Takeoff Tool project on GitHub">
-          <span class="row-index">P / 01</span>
-          <span class="work-main">
-            <span class="work-title">Wall Takeoff Tool</span>
-            <span class="work-description">A terminal-based tool that turns plan inputs into standardized shaft-wall elevation drawings and repeatable DXF / PDF packages.</span>
-          </span>
-          <span class="row-action row-action-stack">
-            <span class="row-meta">Python / DXF / PDF<br />SQLite / Automation</span>
-            <span>View GitHub <span class="arrow" aria-hidden="true">↗</span></span>
-          </span>
-        </a>
-
-        <div class="work-row work-row-static" role="group" aria-label="Estimating Workflow Automation project">
-          <span class="row-index">P / 02</span>
-          <span class="work-main">
-            <span class="work-title">Estimating Workflow Automation</span>
-            <span class="work-description">Excel, VBA, and Bluebeam workflows focused on reducing repetitive takeoff steps and improving consistency across bids.</span>
-          </span>
-          <span class="row-action row-action-stack">
-            <span class="row-meta">Excel / VBA<br />Bluebeam</span>
-            <span>Applied Practice</span>
-          </span>
-        </div>
-      </div>
-    </section>
-
-    <section aria-labelledby="capabilities-title">
+    <section id="capabilities" data-section="capabilities" aria-labelledby="capabilities-title">
       <div class="section-head">
         <span class="section-index">04 / Capability</span>
         <h2 class="section-title" id="capabilities-title">Tools and disciplines used in the work.</h2>
@@ -781,7 +1033,7 @@
       </div>
     </section>
 
-    <section aria-labelledby="contact-title">
+    <section id="contact" data-section="contact" aria-labelledby="contact-title">
       <div class="section-head">
         <span class="section-index">05 / Contact</span>
         <h2 class="section-title" id="contact-title">Professional links and direct contact.</h2>
@@ -814,5 +1066,54 @@
       <span class="status">Hamilton, Ontario / Canada</span>
     </footer>
   </main>
+
+  <script>
+    (() => {
+      const progress = document.querySelector(".scroll-progress");
+      const navLinks = [...document.querySelectorAll(".site-nav a")];
+      const sections = [...document.querySelectorAll("[data-section]")];
+      let frameRequested = false;
+
+      const updateProgress = () => {
+        const scrollable = document.documentElement.scrollHeight - window.innerHeight;
+        const value = scrollable > 0 ? Math.min(window.scrollY / scrollable, 1) : 0;
+        progress.style.transform = `scaleX(${value})`;
+        frameRequested = false;
+      };
+
+      const requestProgress = () => {
+        if (!frameRequested) {
+          frameRequested = true;
+          window.requestAnimationFrame(updateProgress);
+        }
+      };
+
+      const setCurrentSection = (id) => {
+        navLinks.forEach((link) => {
+          if (link.getAttribute("href") === `#${id}`) {
+            link.setAttribute("aria-current", "location");
+          } else {
+            link.removeAttribute("aria-current");
+          }
+        });
+      };
+
+      const observer = new IntersectionObserver((entries) => {
+        const visible = entries
+          .filter((entry) => entry.isIntersecting)
+          .sort((a, b) => a.boundingClientRect.top - b.boundingClientRect.top);
+
+        if (visible[0]) {
+          setCurrentSection(visible[0].target.dataset.section);
+        }
+      }, { rootMargin: "-18% 0px -68% 0px", threshold: 0 });
+
+      sections.forEach((section) => observer.observe(section));
+      document.querySelector(".case-study").addEventListener("toggle", requestProgress);
+      window.addEventListener("scroll", requestProgress, { passive: true });
+      window.addEventListener("resize", requestProgress);
+      updateProgress();
+    })();
+  </script>
 </body>
 </html>
